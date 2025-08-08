@@ -38,6 +38,48 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+# Product Models
+class Product(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    product_id: str  # Campo específico ID conforme solicitado
+    name: str
+    value: float
+    stock: int = 0
+    qr_code_data: Optional[str] = None
+    qr_code_image: Optional[str] = None  # Base64 encoded QR code image
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ProductCreate(BaseModel):
+    product_id: str
+    name: str
+    value: float
+    stock: int = 0
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    value: Optional[float] = None
+    stock: Optional[int] = None
+
+# Ticket Models
+class Ticket(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    product_id: str
+    product_name: str
+    product_value: float
+    ticket_number: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
+    quantity: int = 1
+    is_redeemed: bool = False
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    redeemed_at: Optional[datetime] = None
+
+class TicketCreate(BaseModel):
+    product_id: str
+    quantity: int = 1
+
+class TicketRedeem(BaseModel):
+    ticket_id: str
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
