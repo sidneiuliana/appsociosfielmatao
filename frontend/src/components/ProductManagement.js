@@ -34,6 +34,8 @@ const ProductManagement = () => {
   const [showProductDialog, setShowProductDialog] = useState(false);
   const [showTicketDialog, setShowTicketDialog] = useState(false);
   const [showQRDialog, setShowQRDialog] = useState(false);
+  const [showPrintDialog, setShowPrintDialog] = useState(false);
+  const [printData, setPrintData] = useState(null);
 
   // Fetch products
   const fetchProducts = async () => {
