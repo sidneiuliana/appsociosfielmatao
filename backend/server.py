@@ -28,6 +28,22 @@ app = FastAPI()
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Utility function to generate QR code
+def generate_qr_code(product_data: dict) -> str:
+    """Generate QR code for product and return base64 encoded image"""
+    qr_data = f"Product: {product_data['name']}\nID: {product_data['product_id']}\nValue: ${product_data['value']}"
+    
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(qr_data)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    
+    return base64.b64encode(buffer.getvalue()).decode()
+
 
 # Define Models
 class StatusCheck(BaseModel):
