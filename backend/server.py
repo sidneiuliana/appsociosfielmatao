@@ -187,6 +187,84 @@ async def delete_product(product_id: str):
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Product deleted successfully"}
 
+# Ticket Endpoints
+@api_router.post("/tickets", response_model=List[Ticket])
+async def create_tickets(ticket_data: TicketCreate):
+    """Create tickets for a product"""
+    
+    # Get product details
+    product = await db.products.find_one({"product_id": ticket_data.product_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Check if there's enough stock
+    if product["stock"] < ticket_data.quantity:
+        raise HTTPException(status_code=400, detail="Not enough stock available")
+    
+    # Create tickets
+    tickets = []
+    for _ in range(ticket_data.quantity):
+        ticket = Ticket(
+            product_id=product["product_id"],
+            product_name=product["name"],
+            product_value=product["value"],
+            quantity=1
+        )
+        tickets.append(ticket)
+    
+    # Insert tickets into database
+    tickets_dict = [ticket.dict() for ticket in tickets]
+    await db.tickets.insert_many(tickets_dict)
+    
+    # Update product stock
+    new_stock = product["stock"] - ticket_data.quantity
+    await db.products.update_one(
+        {"product_id": ticket_data.product_id},
+        {"$set": {"stock": new_stock, "updated_at": datetime.utcnow()}}
+    )
+    
+    return tickets
+
+@api_router.get("/tickets", response_model=List[Ticket])
+async def get_tickets():
+    """Get all tickets"""
+    tickets = await db.tickets.find().to_list(1000)
+    return [Ticket(**ticket) for ticket in tickets]
+
+@api_router.get("/tickets/product/{product_id}", response_model=List[Ticket])
+async def get_tickets_by_product(product_id: str):
+    """Get all tickets for a specific product"""
+    tickets = await db.tickets.find({"product_id": product_id}).to_list(1000)
+    return [Ticket(**ticket) for ticket in tickets]
+
+@api_router.post("/tickets/redeem")
+async def redeem_ticket(redeem_data: TicketRedeem):
+    """Redeem a ticket (decrease stock)"""
+    
+    # Find the ticket
+    ticket = await db.tickets.find_one({"id": redeem_data.ticket_id})
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    if ticket["is_redeemed"]:
+        raise HTTPException(status_code=400, detail="Ticket already redeemed")
+    
+    # Mark ticket as redeemed
+    await db.tickets.update_one(
+        {"id": redeem_data.ticket_id},
+        {"$set": {"is_redeemed": True, "redeemed_at": datetime.utcnow()}}
+    )
+    
+    return {"message": "Ticket redeemed successfully"}
+
+@api_router.get("/tickets/{ticket_id}", response_model=Ticket)
+async def get_ticket(ticket_id: str):
+    """Get a specific ticket"""
+    ticket = await db.tickets.find_one({"id": ticket_id})
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    return Ticket(**ticket)
+
 # Include the router in the main app
 app.include_router(api_router)
 
