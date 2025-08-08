@@ -382,6 +382,25 @@ const ProductManagement = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Print Tickets Dialog */}
+      <Dialog open={showPrintDialog} onOpenChange={setShowPrintDialog}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>Tickets para Impressão</DialogTitle>
+            <DialogDescription>
+              Os tickets foram criados com sucesso. Use o botão de impressão para imprimir.
+            </DialogDescription>
+          </DialogHeader>
+          {printData && (
+            <PrintableTicket 
+              productId={printData.productId}
+              quantity={printData.quantity}
+              onClose={() => setShowPrintDialog(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
