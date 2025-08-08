@@ -104,6 +104,14 @@ const ProductManagement = () => {
       
       toast.success(`${ticketQuantity} ticket(s) criado(s) com sucesso!`);
       setShowTicketDialog(false);
+      
+      // Show printable tickets
+      setPrintData({
+        productId: selectedProduct.product_id,
+        quantity: parseInt(ticketQuantity)
+      });
+      setShowPrintDialog(true);
+      
       setTicketQuantity(1);
       fetchProducts(); // Refresh to update stock
       fetchTickets();
