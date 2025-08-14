@@ -1,0 +1,39 @@
+Quero um aplicativo que contenha um cadastro de produtos, contendo, nome do produto, valor do produto e um QRCODE e, 
+que permita que sejam impressos tickets de produtos, selecionando o produto e quantos tickets desejo. 
+Será preciso ter o controle de estoque dos produtos. 
+Quando for dada a baixa de um ticket que foi impresso anteriormente.
+
+
+https://vscode-398f0ed4-6846-4ca5-98de-90ba889824b2.preview.emergentagent.com/
+ec3a3b82
+
+Removi das variaveis de ambiente
+Usuario
+C:\Program Files\Python37
+
+
+Sistema
+C:\Program Files\Python37\Scripts\
+C:\Program Files\Python37\
+C:\Program Files\Python312
+C:\Program Files\Python312\Scripts
+
+
+retirei do env backend
+MONGO_URL="mongodb://localhost:27017"
+DB_NAME="test_database"
+
+retirei do env fontend
+REACT_APP_BACKEND_URL=https://5cbb35e1-e4b7-4365-a186-473197fe43d8.preview.emergentagent.com
+WDS_SOCKET_PORT=443
+
+Roda o backend
+cd backend
+uvicorn server:app --host 127.0.0.1 --port 5025 --reload
+
+Roda o frontend
+cd frontend
+yarn start
+
+
+npm install react-qr-reader

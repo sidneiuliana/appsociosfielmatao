@@ -113,8 +113,12 @@ sudo supervisorctl restart frontend
 #### Backend
 ```bash
 cd /app/backend
-uvicorn server:app --host 0.0.0.0 --port 8001 --reload
-```
+#####uvicorn server:app --host 0.0.0.0 --port 8001 --reload
+uvicorn server:app --host 127.0.0.1 --port 5025 --reload
+#####uvicorn server:app --host 127.0.0.1 --port 5025 --reload```
+
+
+
 
 #### Frontend
 ```bash

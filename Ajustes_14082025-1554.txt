@@ -1,0 +1,9 @@
+Objetivo:
+5)O ID do cadastro do produto deve ser automatico e o campo deve ser bloqueado
+
+Contexto:
+5)O Campo ID nao e necessario no cadastro do produto.
+  O campo ID apresentado no card deve ser o ID da tabela products.
+  o Campo na tela deve ficar desabilitado
+  Capo na tela
+  <input class="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm w-80" id="product_id" placeholder="Ex: PROD-001" required="" value="">
