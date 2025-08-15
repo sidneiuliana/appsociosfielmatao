@@ -79,9 +79,9 @@ class DBTicket(Base):
 Base.metadata.create_all(bind=engine)
 
 # Utility function to generate QR code
-def generate_qr_code(product: DBProduct) -> str:
+def generate_qr_code(product_data: dict) -> str:
     """Generate QR code for product and return base64 encoded image"""
-    qr_data = f"Product: {product.name}\nID: {product.product_id}\nValue: ${product.value}"
+    qr_data = f"Product: {product_data['name']}\nID: {product_data['product_id']}\nValue: ${product_data['value']}"
     
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
     qr.add_data(qr_data)

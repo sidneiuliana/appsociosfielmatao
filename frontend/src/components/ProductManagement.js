@@ -594,59 +594,13 @@ const filteredProducts = products.filter((product) =>
         </Dialog>
 
       </TabsContent>
-
         {/* Tickets Tab */}
         <TabsContent value="tickets" className="space-y-4">
           <h2 className="text-2xl font-semibold">Tickets</h2>
           
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead onClick={() => handleSort('ticket_number')} className="cursor-pointer">Número do Ticket {sortColumn === 'ticket_number' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead onClick={() => handleSort('product_name')} className="cursor-pointer">Produto {sortColumn === 'product_name' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead onClick={() => handleSort('product_value')} className="cursor-pointer">Valor {sortColumn === 'product_value' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead onClick={() => handleSort('is_redeemed')} className="cursor-pointer">Status {sortColumn === 'is_redeemed' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead onClick={() => handleSort('created_at')} className="cursor-pointer">Criado em {sortColumn === 'created_at' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-           <TableBody>
-                {tickets.map((ticket) => (
-                  <TableRow key={ticket.id}>
-                    <TableCell className="font-mono">{ticket.ticket_number}</TableCell>
-                    <TableCell>{ticket.product_name}</TableCell>
-                    <TableCell>R$ {ticket.product_value.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Badge variant={ticket.is_redeemed ? "destructive" : "default"}>
-                        {ticket.is_redeemed ? 'Resgatado' : 'Ativo'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(ticket.created_at).toLocaleString('pt-BR')}
-                    </TableCell>
-                    <TableCell>
-                      {!ticket.is_redeemed && (
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleRedeemTicket(ticket.id)}
-                          disabled={loading}
-                        >
-                          Resgatar
-                        </Button>
-                      )}
-                    </TableCell>
-                </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </TabsContent>
-
 {/* minha inicio */}
 <TabsContent value="tickets" className="space-y-4">
-  <h2 className="text-2xl font-semibold">Tickets</h2>
+  {/* <h2 className="text-2xl font-semibold">Tickets</h2> */}
 
   <div className="mb-4">
     <Button onClick={() => setShowQRScanner(true)}>
@@ -669,7 +623,7 @@ const filteredProducts = products.filter((product) =>
     </div>
   )}
 
-  <div className="border rounded-lg">
+{/*   <div className="border rounded-lg">
     <Table>
       <TableHeader>
         <TableRow>
@@ -711,10 +665,58 @@ const filteredProducts = products.filter((product) =>
         ))}
       </TableBody>
     </Table>
-  </div>
+  </div> */}
+  
 </TabsContent>
 {/* minha fim */}
 
+
+
+
+          <div className="border rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead onClick={() => handleSort('ticket_number')} className="cursor-pointer">Número do Ticket {sortColumn === 'ticket_number' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('product_name')} className="cursor-pointer">Produto {sortColumn === 'product_name' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('product_value')} className="cursor-pointer">Valor {sortColumn === 'product_value' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('is_redeemed')} className="cursor-pointer">Status {sortColumn === 'is_redeemed' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('created_at')} className="cursor-pointer">Criado em {sortColumn === 'created_at' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+           <TableBody>
+                {tickets.filter(ticket => !ticket.is_redeemed).map((ticket) => (
+                  <TableRow key={ticket.id}>
+                    <TableCell className="font-mono">{ticket.ticket_number}</TableCell>
+                    <TableCell>{ticket.product_name}</TableCell>
+                    <TableCell>R$ {ticket.product_value.toFixed(2)}</TableCell>
+                    <TableCell>
+                      <Badge variant={ticket.is_redeemed ? "destructive" : "default"}>
+                        {ticket.is_redeemed ? 'Resgatado' : 'Ativo'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(ticket.created_at).toLocaleString('pt-BR')}
+                    </TableCell>
+                    <TableCell>
+                      {!ticket.is_redeemed && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleRedeemTicket(ticket.id)}
+                          disabled={loading}
+                        >
+                          Resgatar
+                        </Button>
+                      )}
+                    </TableCell>
+                </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </TabsContent>
       </Tabs>
 
       {/* Create Tickets Dialog */}
