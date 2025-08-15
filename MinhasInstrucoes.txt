@@ -17,6 +17,9 @@ Comandos gits
 	git log (vejo que ja esta la o commit)
 	git branch (pegar o nome da branch)
 	git push origin projeto-inicial
+	
+	git checkout main (main foi atualizada)
+	git pull (atualizando a main)
 
 =================================
 
