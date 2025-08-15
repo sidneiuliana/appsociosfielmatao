@@ -24,7 +24,9 @@ const ProductManagement = () => {
   const [loading, setLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showQRScanner, setShowQRScanner] = useState(false);
-  const [productTicketCounts, setProductTicketCounts] = useState({});   
+  const [productTicketCounts, setProductTicketCounts] = useState({});
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');   
  
   // Form states
   const [newProduct, setNewProduct] = useState({
@@ -100,6 +102,21 @@ const ProductManagement = () => {
     }
   };
 
+  const handleSort = (column) => {
+    const direction = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortColumn(column);
+    setSortDirection(direction);
+
+    const sortedTickets = [...tickets].sort((a, b) => {
+      const aValue = a[column];
+      const bValue = b[column];
+
+      if (aValue < bValue) return direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    setTickets(sortedTickets);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -179,9 +196,20 @@ const ProductManagement = () => {
   const handleRedeemTicket = async (ticketId) => {
     try {
       setLoading(true);
-      await axios.post(`${API}/tickets/redeem`, { ticket_id: ticketId });
+      const response = await axios.post(`${API}/tickets/redeem`, { ticket_id: ticketId });
       toast.success('Ticket resgatado com sucesso!');
-      fetchTickets();
+
+      // Remove the redeemed ticket from the local state
+      setTickets(prevTickets => prevTickets.filter(ticket => ticket.id !== ticketId));
+
+      // Update the printed_quantity of the corresponding product
+      setProducts(prevProducts =>
+        prevProducts.map(product =>
+          product.product_id === response.data.product_id
+            ? { ...product, printed_quantity: product.printed_quantity - 1 }
+            : product
+        )
+      );
     } catch (error) {
       console.error('Error redeeming ticket:', error);
       toast.error(typeof error.response?.data?.detail === 'object' ? JSON.stringify(error.response.data.detail) : error.response?.data?.detail || 'Erro ao resgatar ticket');
@@ -387,7 +415,7 @@ const filteredProducts = products.filter((product) =>
               {product.stock} em estoque
             </Badge>
             <Badge variant="secondary">
-              {productTicketCounts[product.product_id] || 0} tickets impressos
+              {product.printed_quantity} tickets impressos
             </Badge>
           </CardTitle>
           <CardDescription>ID: {product.product_id}</CardDescription>
@@ -568,18 +596,18 @@ const filteredProducts = products.filter((product) =>
       </TabsContent>
 
         {/* Tickets Tab */}
-     {/*    <TabsContent value="tickets" className="space-y-4">
+        <TabsContent value="tickets" className="space-y-4">
           <h2 className="text-2xl font-semibold">Tickets</h2>
           
           <div className="border rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Número do Ticket</TableHead>
-                  <TableHead>Produto</TableHead>
-                  <TableHead>Valor</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Criado em</TableHead>
+                  <TableHead onClick={() => handleSort('ticket_number')} className="cursor-pointer">Número do Ticket {sortColumn === 'ticket_number' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('product_name')} className="cursor-pointer">Produto {sortColumn === 'product_name' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('product_value')} className="cursor-pointer">Valor {sortColumn === 'product_value' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('is_redeemed')} className="cursor-pointer">Status {sortColumn === 'is_redeemed' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
+                  <TableHead onClick={() => handleSort('created_at')} className="cursor-pointer">Criado em {sortColumn === 'created_at' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</TableHead>
                   <TableHead>Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -609,12 +637,12 @@ const filteredProducts = products.filter((product) =>
                         </Button>
                       )}
                     </TableCell>
-                  </TableRow>
+                </TableRow>
                 ))}
-              </TableBody> 
+              </TableBody>
             </Table>
           </div>
-        </TabsContent> */}
+        </TabsContent>
 
 {/* minha inicio */}
 <TabsContent value="tickets" className="space-y-4">

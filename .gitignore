@@ -80,4 +80,4 @@ agenthub/agents/youtube/db
 android-sdk/ 
 .env
 .env.local
-MinhasInstrucoes.txt
+.MinhasInstrucoes.txt

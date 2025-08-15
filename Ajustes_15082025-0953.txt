@@ -1,0 +1,30 @@
+GITHub --->>>sidneiuliana -->> $is4dmSUGITEstudos 
+https://github.com/sidneiuliana/appsociosfielmatao
+
+
+Comandos gits
+
+	git status
+	git pull (pra cehcar se estou atualizado com a branche la da origen)
+	git branch (vou verificar que estou na main)
+	git checkout -b projeto-inicial
+	git branch (vejo que estou na branch projeto-inicial)
+	git status
+	git add . (adiciona todos os arquivos)
+	git status
+	git commit -m "Adicionei os arquivos iniciais e o primeiro teste de login"
+	git log (vejo que ja esta la o commit)
+	git branch (pegar o nome da branch)
+	git push origin projeto-inicial
+	
+	git checkout main (main foi atualizada)
+	git pull (atualizando a main)
+
+Objetivo:
+1)Ajustes na tela de tickets
+
+Contexto:
+1)Deixar opcao de ordenar as colunas da listagem dos tickets
+2)Quando clicar no botao resgatar de um ticket, deve ser retirado o ticket da lista, mas sem exlcuir da tabela tickets
+3)Ainda quando clicar no botao resgatar de um ticket, na tabela products, na coluna printed_quantity, devera reduzida a quantidade em -1,
+  a cada clique, correspondente do produto
