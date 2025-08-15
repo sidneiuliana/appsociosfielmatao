@@ -393,7 +393,7 @@ const filteredProducts = products.filter((product) =>
           <CardDescription>ID: {product.product_id}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold text-green-600">R$ {product.value.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-gray-400">R$ {product.value.toFixed(2)}</p>
           <p className="text-sm text-gray-600">Estoque: {product.stock}</p>
           <p className="text-sm text-gray-600">Status: {product.status === 'active' ? 'Ativo' : 'Inativo'}</p>
         </CardContent>
