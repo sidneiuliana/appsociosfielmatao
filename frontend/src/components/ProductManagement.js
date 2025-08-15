@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from './ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { toast } from 'sonner';
 import PrintableTicket from './PrintableTicket';
-import { QrReader } from 'react-qr-reader'; // Adicione este import
+import QRScannerComponent from './QRScannerComponent';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -609,18 +609,11 @@ const filteredProducts = products.filter((product) =>
   </div>
 
   {showQRScanner && (
-    <div className="mb-4">
-      <QrReader
-        delay={300}
-        onError={handleError}
-        onScan={handleScan}
-        style={{ width: '100%' }}
-        facingMode="environment"
-      />
-      <Button variant="outline" onClick={() => setShowQRScanner(false)} className="mt-2">
-        Cancelar
-      </Button>
-    </div>
+    <QRScannerComponent
+      handleError={handleError}
+      handleScan={handleScan}
+      setShowQRScanner={setShowQRScanner}
+    />
   )}
 
 {/*   <div className="border rounded-lg">
